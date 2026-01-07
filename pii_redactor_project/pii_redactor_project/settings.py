@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-YOUR-SECRET-KEY'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["Intelligent-PII-Redaction-Tool.onrender.com"]
+ALLOWED_HOSTS = ["intelligent-pii-redaction-tool.onrender.com"]
 
 
 # Application definition
