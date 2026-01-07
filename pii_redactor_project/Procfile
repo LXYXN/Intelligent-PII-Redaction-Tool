@@ -1,0 +1,1 @@
+web: gunicorn pii_redactor_project.wsgi
