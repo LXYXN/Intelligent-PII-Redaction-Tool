@@ -10,3 +10,4 @@ steganography
 pytesseract
 PyMuPDF
 python-docx
+gunicorn
