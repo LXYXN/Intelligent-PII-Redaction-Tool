@@ -31,6 +31,90 @@ A powerful, AI-driven web application designed to automatically detect and redac
 - **Image Processing**: OpenCV, Pillow (PIL), Tesseract OCR
 - **Document Handling**: PyMuPDF (Fitz), python-docx
 
+## Project Structure
+
+```
+pii
+│   Intelligent-PII-Redaction-Tool
+    ├── pii_redactor_project
+    │   ├── pii_redactor_project
+    │   │   ├── __init__.py
+    │   │   ├── asgi.py
+    │   │   ├── settings.py
+    │   │   ├── urls.py
+    │   │   └── wsgi.py
+    │   ├── redactor_app
+    │   │   ├── migrations
+    │   │   │   └── __init__.py
+    │   │   ├── templates
+    │   │   │   └── index.html
+    │   │   ├── __init__.py
+    │   │   ├── admin.py
+    │   │   ├── apps.py
+    │   │   ├── models.py
+    │   │   ├── services.py
+    │   │   ├── tests.py
+    │   │   ├── urls.py
+    │   │   └── views.py
+    │   ├── db.sqlite3
+    │   ├── manage.py
+    │   ├── test_watermark.pdf
+    │   └── test_watermark.png
+```
+
+## Architecture
+
+Below is a high-level architecture diagram illustrating how the web app components interact (Mermaid):
+
+```mermaid
+graph TB
+%% === STYLES ===
+classDef core fill:#1E90FF,stroke:#000,color:#000,stroke-width:2px,rx:10px,ry:10px;
+classDef external fill:#FFD700,stroke:#000,color:#000,stroke-width:2px,rx:10px,ry:10px;
+
+User(("User<br/>Web Interface"))
+
+subgraph "Web Application Container"
+  DjangoServer["Django Web Server<br/>Handles HTTP requests"]:::core
+  Templates["Templates & Static Files<br/>HTML, CSS, JS"]:::core
+  Middleware["Django Middleware & Routing<br/>Request handling"]:::core
+end
+
+User -->|"uploads file"| DjangoServer
+DjangoServer -->|"serves frontend"| Templates
+DjangoServer -->|"routes requests"| Middleware
+
+subgraph "Processing Services"
+  ServicesModule["Services Module<br/>File processing, PII detection"]:::core
+  ModelsModule["Models Module<br/>Currently empty"]:::core
+  ViewsModule["Views Module<br/>Handles HTTP endpoints"]:::core
+end
+
+DjangoServer -->|"invokes processing"| ServicesModule
+DjangoServer -->|"handles views"| ViewsModule
+
+subgraph "External Dependencies"
+  LocalNER["Local NER Model<br/>spaCy, Hugging Face"]:::external
+  ExternalAPI["External API<br/>Google Gemini"]:::external
+  PDFLib["PDF Library<br/>PyMuPDF"]:::external
+  DOCXLib["DOCX Library<br/>python-docx"]:::external
+  ImageProcLib["Image Processing Libraries<br/>OpenCV, pytesseract"]:::external
+  SteganographyLib["Steganography Library<br/>Covert redaction"]:::external
+end
+
+ServicesModule -->|"uses"| LocalNER
+ServicesModule -->|"calls"| ExternalAPI
+ServicesModule -->|"processes PDFs"| PDFLib
+ServicesModule -->|"processes DOCX"| DOCXLib
+ServicesModule -->|"processes images"| ImageProcLib
+ServicesModule -->|"applies covert redaction"| SteganographyLib
+
+User -->|"selects options"| DjangoServer
+DjangoServer -->|"sends AJAX request to /redact/"| ServicesModule
+ServicesModule -->|"returns redacted file"| DjangoServer
+DjangoServer -->|"downloads processed file"| User
+```
+
 ## Installation & Setup
 
 ### Prerequisites
